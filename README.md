@@ -1,6 +1,6 @@
 # Continuous Integration
 
-**Software Delivery Lifecyle**
+### Software Delivery Lifecyle
 
 In the lifecycle of creating software, there are several stages:
 
@@ -12,22 +12,21 @@ In the lifecycle of creating software, there are several stages:
 
 - **Deploy**: Once the software is ready, it needs to be released to users. Deployment involves making the software available for use, whether it's installing it on servers or distributing it to users' devices.
 
-**Continuous Integration (CI)**
+### Continuous Integration (CI)
 
 Continuous Integration (CI) is when developers regularly merge their code changes into a shared repository. Each merge triggers an automated build and test process, allowing teams to detect problems early and often.
 
 <img src="./assets/image.png">
 
 
-**Building CI**
+### Building CI
 
 Building CI involves setting up tools and processes to automate the integration, build, and testing of code changes. This typically includes using:
 - Version control systems (e.g. Git)
 - Automated build tools (e.g. AWS CodePipeline)
 - Testing frameworks.
 
-**Research & Development**
- - What - Where - Why - How - When**
+### Research & Development
 
 - **What**: CI ensures frequent integration of code changes into a shared repository, which helps in early detection of issues.
 
