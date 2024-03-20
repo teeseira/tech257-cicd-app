@@ -68,10 +68,12 @@ Creating a webhook on GitHub and set up continuous integration (CI) using Jenkin
 
 ### Test the CI
 
-- Configure the Jenkins Jobs [like this](#integrate-continuous-integration).
+- Configure the Jenkins jobs [like this](#integrate-continuous-integration).
+  - But for Build Triggers, select `GitHub hook triger fr GITScm polling`.
+    <br>![alt text](image-15.png)
 - Now test the CI:
-   - Make a change to your README file in the GitHub repository. #test
+   - Make a change to your README file in the GitHub repository.
    - Commit and push the change to GitHub.
    - GitHub will trigger the webhook, which in turn will trigger the Jenkins job.
    - Monitor Jenkins to ensure that the job executes successfully.
- - 
+    <br>![alt text](image-16.png)
