@@ -18,5 +18,16 @@ Allow write access
         > Note for private key include the start and end e.g. from where it says `-----BEGIN OPENSSH PRIVATE KEY-----`
         <br> Results:<br>
         ![alt text](image-10.png)
+  - Branch specifier: `*/main`
+- Build environment:
+  ![alt text](image-9.png)
+- Build:
+  ![alt text](image-12.png)
 
+- Click `Save`
 
+### Trigger the Job
+
+- Click `Build Now`
+- If unsuccessful review `Build History` > and `Console Output`.
+- 
