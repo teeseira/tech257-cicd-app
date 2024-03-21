@@ -81,14 +81,87 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
     <br><img src="../assets/image-16.png" width=200px>
     <br><img src="../assets/image-17.png" width=600px>
   
-## Integrate Continuous Delivery
+## Integrate Merge
 
 ### Update the payload URL
 
-Update the payload URL, and push a code change to ensure CI is still working.
-
-<img src="../assets/image-18.png" >
+- In your GitHub repo settings, <!--find the webhook you've set up for Jenkins, and --> update the Payload URL<!-- to the appropriate Jenkins webhook URL. This URL should be the endpoint where Jenkins listens for webhook events-->.
+  <img src="../assets/image-18.png" >
+- Commit a change locally and push it to GitHub.
+- Check that Jenkins receives the webhook payload and triggers the CI job. <!-- You can check the Jenkins job's build history or console output to confirm. -->
 
 ### Create a "dev" branch, update the Jenkins job, and test
 
+   - Create a new branch named "dev" on local machine: `git checkout -b dev`.
+   - Push the "dev" branch to your GitHub repo: `git push origin dev`.
+   - In your Jenkins job for the CI, update the branch to build from `*/dev`.
+      <br><img src="../assets/image-19.png" >
+   - Commit a change on the "dev" branch and push it to GitHub: `git push origin dev`.
+   - Check that Jenkins triggers the job.
+   <br><img src="../assets/image-20.png">
+  
 ### Create a new Jenkins job for merge from dev to main branch
+
+- Jenkins dashboard > "New Item" e.g. `My-CI-Merge` > Freestyle project > OK.
+- For `General`, give Description: e.g. _merge from dev to main after successful tests_ > tick `Discard old build` > Max #: of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
+- For `Office 365 Connector`, tick `Restrict where this project can be run` and provide the Label expression (agent node).
+- For `Source Code Managment`, select `Git` > provide **Repository URL** (SSH one) > Branch specifier: `*/main`.
+- For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CI`.
+   <br><img src="../assets/image-21.png">
+- For `Build Environment` tick `Provide Node & npm bin/ folder to PATH`.
+- For `Post-build Actions` choose `Git Publisher`, then the following:
+  <br><img src="../assets/image-22.png">
+  >This will execute a Git merge from "dev" to "main".
+- `Save` the job config.
+
+#### Test the setup on Jenkins
+
+- Click `Build Now` on the previous Jenkins job "My-CI".
+- Ensure that the "My-CI-Merge" job is triggered by the successful completion of your previous CI job.
+
+#### Test the setup on GitHub
+
+- Push a change to the "dev" branch (`git push origin dev`) and verify that Jenkins triggers the "My-CI-Merge" job to merge the changes into the main branch.
+
+## Integrate Continuous Delivery (with AWS)
+
+### Create an Amazon EC2 Instance
+
+- AWS Management Console > EC2 > Launch instance > Name e.g. `my-tech257-cd-app` > choose the Community AMI provided:
+  <br><img src="../assets/image-23.png">
+- Instance type: t2.micro > choose Key pair > choose existing security group (which allows for ports 22, 80 and 3000).
+- In Advanced details, enter the user data:
+
+  ```
+  sudo apt update -y
+  sudo apt upgrade -y
+  ```
+- `Launch instance`.
+
+### Create new job on Jenkins
+
+- Create a new Job called `My-CD`, for example.
+- For `General`, give Description: e.g. _merge CD with AWS_ > tick `Discard old build` > Max #: of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
+- For `Source Code Managment`, select `Git` > provide **Repository URL** (SSH one) > Branch specifier: `*/main`.
+<!-- For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CD-Merge`. we will build manually first-->
+- For `Build Environment` tick `Provide Node & npm bin/ folder to PATH` and `SSH agent`
+  - In the SSH agent add credentials > Kind: SSH Username with private key > Username: pemkey > Add private key (this is the value of the AWS **.pem** file) > Add.
+- For `Build` choose `Execute shell`, then enter:
+
+  ```
+  # ensure the aws security group allows ssh to jenkins ip
+  # ensure file.pem provided to Jenkins
+  # ensure ec2 is running
+  ssh -o "StrictHostKeyChecking=no" ubuntu@3.250.0.106 <<EOF
+      sudo apt update -y
+      sudo apt upgrade -y
+      sudo apt install nginx -y
+  EOF
+  ```
+
+Then switch to main brancg and do git pull
+
+```
+git checkout main
+git pull origin main
+```
