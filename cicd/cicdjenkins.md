@@ -159,9 +159,3 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
   EOF
   ```
 
-Then switch to main brancg and do git pull
-
-```
-git checkout main
-git pull origin main
-```
