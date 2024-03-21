@@ -82,3 +82,9 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
     <br><img src="../assets/image-17.png" width=600px>
   
 ## Integrate Continuous Delivery
+
+### Update the payload URL
+
+Update the payload URL, and push a code change to ensure CI is still working.
+
+<img src="../assets/image-18.png" >
