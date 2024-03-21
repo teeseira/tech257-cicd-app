@@ -90,3 +90,5 @@ Update the payload URL, and push a code change to ensure CI is still working.
 <img src="../assets/image-18.png" >
 
 ### Create a "dev" branch, update the Jenkins job, and test
+
+### Create a new Jenkins job for merge from dev to main branch
