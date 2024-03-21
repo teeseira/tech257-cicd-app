@@ -1,6 +1,8 @@
 # CI/DI with Jenkins
 
-<!-- ## Architectural Design -->
+## Architectural Design
+
+<br><img src="../assets/image0.png" width=600px>
 
 ## Integrate Continuous Integration
 
@@ -17,13 +19,14 @@
 
 - For `General`:
   - Provide a `Description`, tick box for `Discard old builds` and have a Max # of build to keep as `3`.
-  <br>![alt text](image-5.png)
+  <br><img src="../assets/image-5.png" width=600px>
   - Tick the box for `GitHub project`, then enter the **Project url** (this is the GitHub Repo URL - HTTPS one).
-  <br>![alt text](image-8.png)
+  <br><img src="../assets/image-8.png" width=400px>
+  
 
 - For `Office 365 Connector`:
   - Select `Restrict where this project can be run` and provide the `Label expression` (name of the agent node).
-  <br>![alt text](image-6.png)
+  <br><img src="../assets/image-6.png" width=550px>
 
 - For `Source Code Managment`:
   - Select `Git` and provide the **Repository URL** (this time the SSH one because we would like it to be secure).
@@ -31,28 +34,27 @@
     - Click `Add` > `Jenkins`
     - Kind: `SSH Username with private key` > Give a `Username` e.g. *my_key* > click `Add` to store value for private key > then `Add`.
         > Note for private key include the start and end e.g. from where it says `-----BEGIN OPENSSH PRIVATE KEY-----`
-        <br> Results:<br>
-        ![alt text](image-10.png)
+        <br> Results:
+        <br><img src="../assets/image-10.png" width=550px>
   - Branch specifier: `*/main`
 
 - For `Build environment`:
-  <br>![alt text](image-9.png)
+  <br><img src="../assets/image-9.png" width=500px>
 - For `Build`:
-  <br>![alt text](image-12.png)
+  <br><img src="../assets/image-12.png" width=300>
 
 - Click `Save`
 
 ### Trigger the Job
 
-- Click `Build Now`
-  
-  ![alt text](image-13.png)
+- Click `Build Now`.
+  <br><img src="../assets/image-13.png" width=600px>
 
 - If unsuccessful review `Build History` > and `Console Output`.
 
 ## Web Hook
 
-Creating a webhook on GitHub and set up continuous integration (CI) using Jenkins.
+Create a webhook on GitHub, set up continuous integration using Jenkins, and ensure that changes to your repository trigger the CI pipeline automatically.
 
 ### Create Webhook on GitHub
 - Go to your GitHub repository.
@@ -64,16 +66,20 @@ Creating a webhook on GitHub and set up continuous integration (CI) using Jenkin
 - Choose the events that should trigger the webhook: `Just the push event`.
 - Click on "Add webhook" to save the settings.
 
-![alt text](image-14.png)
+<br><img src="../assets/image-14.png" width=500px>
 
 ### Test the CI
 
 - Configure the Jenkins jobs [like this](#integrate-continuous-integration).
   - But for Build Triggers, select `GitHub hook triger fr GITScm polling`.
-    <br>![alt text](image-15.png)
+    <br><img src="../assets/image-15.png" width=600px>
 - Now test the CI:
    - Make a change to your README file in the GitHub repository.
    - Commit and push the change to GitHub.
    - GitHub will trigger the webhook, which in turn will trigger the Jenkins job.
    - Monitor Jenkins to ensure that the job executes successfully.
-    <br>![alt text](image-16.png)
+    <br><img src="../assets/image-16.png" width=200px>
+    <br><img src="../assets/image-17.png" width=600px>
+  
+
+  
