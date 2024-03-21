@@ -106,8 +106,8 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
 - For `General`, give Description: e.g. _merge from dev to main after successful tests_ > tick `Discard old build` > Max #: of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
 - For `Office 365 Connector`, tick `Restrict where this project can be run` and provide the Label expression (agent node).
 - For `Source Code Managment`, select `Git` > provide **Repository URL** (SSH one) > Branch specifier: `*/main`.
-- For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CI`.
-   <br><img src="../assets/image-21.png">
+<!-- - For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CI`.
+   <br><img src="../assets/image-21.png"> -->
 - For `Build Environment` tick `Provide Node & npm bin/ folder to PATH`.
 - For `Post-build Actions` choose `Git Publisher`, then the following:
   <br><img src="../assets/image-22.png">
@@ -138,6 +138,8 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
   ```
 - `Launch instance`.
 
+<br><img src="../assets/image-24.png">
+
 ### Create new job on Jenkins
 
 - Create a new Job called `My-CD`, for example.
@@ -159,3 +161,19 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
   EOF
   ```
 
+- `Save`.
+- `Build Now`.
+- Check AWS Public IP:
+  <br><img src="../assets/image-25.png">
+
+#### Git Troubleshooting: "This branch is 2 commits ahead of main."
+
+If you're currently on the dev branch and you want to directly merge changes from dev branch into the main branch:
+- Switch to main branch: `git checkout main`
+- Merge chnages from dev into main `git merge dev`
+- Fix conflicts and commit the merge: `git commit -m "Merge changes from dev into main"`
+- Push chnages to remote: `git push origin main`
+
+Key takeway: with these steps you can avoid manually creating a pull request on GitHub.
+
+### 
