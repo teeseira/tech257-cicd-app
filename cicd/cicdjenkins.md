@@ -137,15 +137,13 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
   ```
 - `Launch instance`.
   <br><img src="../assets/image-24.png" width=550>
-  <br><img src="../assets/image-24.png" width=550>
 
 ### Create new job on Jenkins
 
 - Create a new Job called `My-CD`, for example.
 - For `General`, give Description: e.g. _merge CD with AWS_ > tick `Discard old builds` > Max #: of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
 - For `Source Code Managment`, select `Git` > provide **Repository URL** (SSH one) > Branch specifier: `*/main`.
-For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CD-Merge`.
-For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CD-Merge`.
+- For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CD-Merge`.
 - For `Build Environment` tick `Provide Node & npm bin/ folder to PATH` and `SSH agent`
   - In the SSH agent add credentials > Kind: SSH Username with private key > Username: pemkey > Add private key (this is the value of the AWS **.pem** file) > Add.
 - For `Build` choose `Execute shell`, then enter:
