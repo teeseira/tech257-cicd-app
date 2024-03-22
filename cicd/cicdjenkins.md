@@ -289,21 +289,20 @@ Before making any changes ensure that you're on testing branch (dev).
 - `git branch` to see your current branch.
 - `git checkout dev` to check out the dev branch.
 
-
 ### Apply code changes
+- Again, double check that you're in the testing branch: `git branch`.
 - Change the heading of app and save:
   <br><img src="../assets/image-33.png" width=400>
 - Push changes to dev branch.
   ```
   git add .
-  git commit -m "Code change"
+  git commit -m "[message]"
   git push origin dev
   ```
 - Merge with main branch.
   ```
   git checkout main
   git merge dev
-  git commit -m "Merge changes from dev branch into main"
   git push origin main
   ```
 
