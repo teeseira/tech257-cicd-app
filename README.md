@@ -1,5 +1,5 @@
 # CICD
 
-- [Continuous Integration](/cicd/ci.md)
+- [CICD](/cicd/cicd.md)
 - [Jenkins](/cicd/jenkins.md)
-- [CICD with Jenkins](/cicd/cicdjenkins.md)
+- [CICD with Jenkins and AWS](/cicd/cicdjenkins.md)

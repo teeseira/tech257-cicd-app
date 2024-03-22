@@ -1,4 +1,4 @@
-# Continuous Integration
+# CICD
 
 ### Software Delivery Lifecyle
 
@@ -12,7 +12,7 @@ In the lifecycle of creating software, there are several stages:
 
 - **Deploy**: Once the software is ready, it needs to be released to users. Deployment involves making the software available for use, whether it's installing it on servers or distributing it to users' devices.
 
-### Continuous Integration (CI)
+## Continuous Integration (CI)
 
 Continuous Integration (CI) is when developers regularly merge their code changes into a shared repository. Each merge triggers an automated build and test process, allowing teams to detect problems early and often.
 
@@ -37,3 +37,13 @@ Building CI involves setting up tools and processes to automate the integration,
 - **How**: Continuous Integration is achieved through automation tools that monitor changes in the code repository, trigger build processes, run automated tests, and provide feedback to developers.
 
 - **When**: Continuous Integration should be implemented from the beginning of a project and integrated into the development process as a standard practice. It should occur continuously throughout the development lifecycle, ideally with each code change triggering an automated build and test process.
+
+## Continuous Delivery (CD)
+
+Continuous Delivery (CD) ensures that your software is always ready to be deployed. It automates the process of building, testing, and preparing changes for release. However, deployment to production is done manually.
+
+## Continuous Deployment (CD)
+
+Continuous Deployment (CD) automates the entire release process, including deployment to production. Every change that passes testing is automatically deployed without human intervention.
+
+In essence, Continuous Delivery gets your software ready for deployment, while Continuous Deployment actually deploys it automatically.

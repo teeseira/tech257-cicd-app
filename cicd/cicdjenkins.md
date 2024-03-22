@@ -86,7 +86,7 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
 ### Update the payload URL
 
 - In your GitHub repo settings, <!--find the webhook you've set up for Jenkins, and --> update the Payload URL<!-- to the appropriate Jenkins webhook URL. This URL should be the endpoint where Jenkins listens for webhook events-->.
-  <img src="../assets/image-18.png" >
+  <br><img src="../assets/image-18.png" width=500>
 - Commit a change locally and push it to GitHub.
 - Check that Jenkins receives the webhook payload and triggers the CI job. <!-- You can check the Jenkins job's build history or console output to confirm. -->
 
@@ -95,10 +95,10 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
    - Create a new branch named "dev" on local machine: `git checkout -b dev`.
    - Push the "dev" branch to your GitHub repo: `git push origin dev`.
    - In your Jenkins job for the CI, update the branch to build from `*/dev`.
-      <br><img src="../assets/image-19.png" >
+      <br><img src="../assets/image-19.png" width=500>
    - Commit a change on the "dev" branch and push it to GitHub: `git push origin dev`.
    - Check that Jenkins triggers the job.
-   <br><img src="../assets/image-20.png">
+   <br><img src="../assets/image-20.png" width=500>
   
 ### Create a new Jenkins job for merge from dev to main branch
 
@@ -111,7 +111,7 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
 - For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CI`.
    <br><img src="../assets/image-21.png">
 - For `Post-build Actions` choose `Git Publisher`, then the following:
-  <br><img src="../assets/image-22.png">
+  <br><img src="../assets/image-22.png" width=500>
   >This will execute a Git merge from "dev" to "main".
 - `Save` the job config.
 
@@ -129,7 +129,7 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
 ### Create an Amazon EC2 Instance
 
 - AWS Management Console > EC2 > Launch instance > Name e.g. `my-tech257-cd-app` > choose the Community AMI provided:
-  <br><img src="../assets/image-23.png">
+  <br><img src="../assets/image-23.png" width=900>
 - Instance type: t2.micro > choose Key pair > choose existing security group (which allows for ports 22, 80 and 3000).
 - In Advanced details, enter the user data:
 
@@ -325,13 +325,15 @@ You want to be able to access the application on its port number.
 
 ## Deploy Application Changes on AWS
 
+### Architecture diagram
+<img src="../assets/jenkins.png" width=500>
+
 ### Review the new IP address
 On AWS, every time you stop and start an instance the Public IP address changes.
 
 - On AWS Management console > EC2 > Start instance for application VM.
 - Review new IP.
-  
-  ![alt text](image.png)
+  <br><img src="../assets/image-28.png" width=500>
 
 ### Update Jenkins job
 
@@ -355,35 +357,35 @@ On AWS, every time you stop and start an instance the Public IP address changes.
       nohup node app.js > /dev/null 2>&1 &
   EOF
   ```
-  ![alt text](image-4.png)
+  <br><img src="../assets/image-29.png" width=550>
 
 - `Build now` only on CD stage.
-  <br>![alt text](image-2.png)
+  <br><img src="../assets/image-30.png" width=400>
 
   > You can also `Build Now` from the CI stage to ensure the Pipeline works:
-  <br>![alt text](image-5.png)
+  <br><img src="../assets/image-31.png" width=500>
 - Check deployment on AWS.
-  <br>![alt text](image-1.png)
+  <br><img src="../assets/image-32.png" width=400>
 
 ### Apply code changes
 - Check you're on testing branch (dev).
 - Change the heading of app and save:
-  
-  ![alt text](image-3.png)
+  <br><img src="../assets/image-33.png" width=400>
 - Push changes to dev branch.
   ```
-  git add index.ejs
+  git add .
   git commit -m "Code change"
   git push origin dev
+  ```
+- Merge with main branch.
+  ```
+  git checkout main
+  git merge dev
+  git commit -m "Merge changes from dev branch into main"
+  git push origin main
   ```
 
-### Make code changes
-- If you're not on testing branch (dev) make sure you are: `git branch`, then `git checkout branch`.
-- Change the heading of the app and save:
-  <br>![alt text](image-3.png)
-- Push changes to dev branch.
-  ```
-  git add index.ejs
-  git commit -m "Code change"
-  git push origin dev
-  ```
+### Verify deployment on AWS
+
+- Yan see the code change of adding "2024":
+  <br><img src="../assets/image-34.png" width=400>
