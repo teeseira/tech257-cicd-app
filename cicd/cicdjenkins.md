@@ -168,8 +168,8 @@ You want to be able to access the application on its port number.
 
 - Go to CD Jenkins Job.
 - For `Build` > `Execute shell`, update the script to:
-  ```
-  # Get app and environment folders on home directory of VM
+  ```bash
+  # Get app and env folders from git root directory to home directory of VM
   rsync -avz -e "ssh -o StrictHostKeyChecking=no" app ubuntu@<PublicIP>:/home/ubuntu/
   rsync -avz -e "ssh -o StrictHostKeyChecking=no" environment ubuntu@<PublicIP>:/home/ubuntu/
 
@@ -204,7 +204,7 @@ You want to be able to access the application on its port number.
   <br><img src="../assets/image-25.png" width=550>
   <br><img src="../assets/image-27.png" width=550>
 
-## Key Takeaways
+### Key Takeaways
 
 - Best practice is to not make changes in the main branch.
 - Only do changes/testing in the `dev` branch.
@@ -245,3 +245,68 @@ You want to be able to access the application on its port number.
   - Resolve conflicts
   - Push changes to remote main branch: `git push origin main`
 -->
+
+## Deploy Application Changes on AWS
+
+### Review the new IP address
+On AWS, every time you stop and start an instance the Public IP address changes.
+
+- On AWS Management console > EC2 > Start instance for application VM.
+- Review new IP.
+  
+  ![alt text](image.png)
+
+### Update Jenkins job
+
+- Update the Jenkins CD job:
+  ```bash
+  # Replace with new app folder
+  rsync -avz -e "ssh -o StrictHostKeyChecking=no" app ubuntu@3.253.33.155:/home/ubuntu/
+
+  # SSH into the VM and execute commands
+  ssh -o "StrictHostKeyChecking=no" ubuntu@3.253.33.155 <<EOF
+      # Navigate to the app directory
+      cd ~/app
+
+      # Stop existing Node.js processes
+      sudo pkill -f node
+
+      # Install dependencies
+      npm install
+      
+      # Launch the app
+      nohup node app.js > /dev/null 2>&1 &
+  EOF
+  ```
+  ![alt text](image-4.png)
+
+- `Build now` only on CD stage.
+  <br>![alt text](image-2.png)
+
+  > You can also `Build Now` from the CI stage to ensure the Pipeline works:
+  <br>![alt text](image-5.png)
+- Check deployment on AWS.
+  <br>![alt text](image-1.png)
+
+### Apply code changes
+- Check you're on testing branch (dev).
+- Change the heading of app and save:
+  
+  ![alt text](image-3.png)
+- Push changes to dev branch.
+  ```
+  git add index.ejs
+  git commit -m "Code change"
+  git push origin dev
+  ```
+
+### Make code changes
+- If you're not on testing branch (dev) make sure you are: `git branch`, then `git checkout branch`.
+- Change the heading of the app and save:
+  <br>![alt text](image-3.png)
+- Push changes to dev branch.
+  ```
+  git add index.ejs
+  git commit -m "Code change"
+  git push origin dev
+  ```
