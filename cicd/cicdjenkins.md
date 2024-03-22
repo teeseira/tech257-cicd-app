@@ -103,11 +103,9 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
 ### Create a new Jenkins job for merge from dev to main branch
 
 - Jenkins dashboard > "New Item" e.g. `My-CI-Merge` > Freestyle project > OK.
-- For `General`, give Description: e.g. _merge from dev to main after successful tests_ > tick `Discard old build` > Max #: of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
+- For `General`, give Description: e.g. _merge from dev to main after successful tests_ > tick `Discard old builds` > Max #: of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
 - For `Office 365 Connector`, tick `Restrict where this project can be run` and provide the Label expression (agent node).
 - For `Source Code Managment`, select `Git` > provide **Repository URL** (SSH one) > Branch specifier: `*/main`.
-- For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CI`.
-   <br><img src="../assets/image-21.png">
 - For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CI`.
    <br><img src="../assets/image-21.png">
 - For `Post-build Actions` choose `Git Publisher`, then the following:
@@ -144,7 +142,7 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
 ### Create new job on Jenkins
 
 - Create a new Job called `My-CD`, for example.
-- For `General`, give Description: e.g. _merge CD with AWS_ > tick `Discard old build` > Max #: of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
+- For `General`, give Description: e.g. _merge CD with AWS_ > tick `Discard old builds` > Max #: of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
 - For `Source Code Managment`, select `Git` > provide **Repository URL** (SSH one) > Branch specifier: `*/main`.
 For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CD-Merge`.
 For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CD-Merge`.
