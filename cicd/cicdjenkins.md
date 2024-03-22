@@ -106,9 +106,8 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
 - For `General`, give Description: e.g. _merge from dev to main after successful tests_ > tick `Discard old build` > Max #: of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
 - For `Office 365 Connector`, tick `Restrict where this project can be run` and provide the Label expression (agent node).
 - For `Source Code Managment`, select `Git` > provide **Repository URL** (SSH one) > Branch specifier: `*/main`.
-<!-- - For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CI`.
-   <br><img src="../assets/image-21.png"> -->
-- For `Build Environment` tick `Provide Node & npm bin/ folder to PATH`.
+- For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CI`.
+   <br><img src="../assets/image-21.png">
 - For `Post-build Actions` choose `Git Publisher`, then the following:
   <br><img src="../assets/image-22.png">
   >This will execute a Git merge from "dev" to "main".
@@ -137,43 +136,112 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
   sudo apt upgrade -y
   ```
 - `Launch instance`.
-
-<br><img src="../assets/image-24.png">
+  <br><img src="../assets/image-24.png" width=550>
 
 ### Create new job on Jenkins
 
 - Create a new Job called `My-CD`, for example.
 - For `General`, give Description: e.g. _merge CD with AWS_ > tick `Discard old build` > Max #: of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
 - For `Source Code Managment`, select `Git` > provide **Repository URL** (SSH one) > Branch specifier: `*/main`.
-<!-- For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CD-Merge`. we will build manually first-->
+For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CD-Merge`.
 - For `Build Environment` tick `Provide Node & npm bin/ folder to PATH` and `SSH agent`
   - In the SSH agent add credentials > Kind: SSH Username with private key > Username: pemkey > Add private key (this is the value of the AWS **.pem** file) > Add.
 - For `Build` choose `Execute shell`, then enter:
-
-  ```
-  # ensure the aws security group allows ssh to jenkins ip
-  # ensure file.pem provided to Jenkins
-  # ensure ec2 is running
+  ```bash
   ssh -o "StrictHostKeyChecking=no" ubuntu@3.250.0.106 <<EOF
       sudo apt update -y
       sudo apt upgrade -y
       sudo apt install nginx -y
   EOF
   ```
+  > This will connect to the specified server, execute the listed commands (update, upgrade, and install nginx), and then close the SSH connection.
 
+### Verify deployment on AWS
+
+- Check the Public IP of the app's EC2 instance:
+  <br><img src="../assets/image-25.png" width=550>
+
+## Normal Proxy
+You want to be able to access the application on its port number.
+
+### Automated method
+
+- Go to CD Jenkins Job.
+- For `Build` > `Execute shell`, update the script to:
+  ```
+  # Get app and environment folders on home directory of VM
+  rsync -avz -e "ssh -o StrictHostKeyChecking=no" app ubuntu@<PublicIP>:/home/ubuntu/
+  rsync -avz -e "ssh -o StrictHostKeyChecking=no" environment ubuntu@<PublicIP>:/home/ubuntu/
+
+  ssh -o "StrictHostKeyChecking=no" ubuntu@<PublicIP> <<EOF
+      sudo apt-get update -y
+      sudo apt-get upgrade -y
+      sudo apt-get install nginx -y
+      sudo systemctl restart nginx 
+      
+      # Find and execute the script
+      cd environment/app/
+      sudo -n chmod +x provision.sh
+      ./provision.sh
+      
+      # Install dependencies and start the app
+      cd ..
+      cd ..
+      cd app
+      sudo apt-get install npm -y
+      npm install
+  ```
+  >Note: Ensure the aws security group allows ssh to jenkins ip. Ensure file.pem provided to Jenkins. Ensure ec2 is running.
 - `Save`.
-- `Build Now`.
-- Check AWS Public IP:
-  <br><img src="../assets/image-25.png">
+- Click `Build Now` on the first Jenkins CI job.
 
-#### Git Troubleshooting: "This branch is 2 commits ahead of main."
+#### Check on AWS
+- Connect and SSH into the application's EC2 instance.
+- Run `ls` to see the **app** and **environment** folders.
+- Navigate into the app folder and run `npm start` to start application.
+  <br><img src="../assets/image-26.png" width=400>
+- Check the Public IP of the app's EC2 instance without and with its port number:
+  <br><img src="../assets/image-25.png" width=550>
+  <br><img src="../assets/image-27.png" width=550>
 
-If you're currently on the dev branch and you want to directly merge changes from dev branch into the main branch:
-- Switch to main branch: `git checkout main`
-- Merge chnages from dev into main `git merge dev`
-- Fix conflicts and commit the merge: `git commit -m "Merge changes from dev into main"`
-- Push chnages to remote: `git push origin main`
+## Key Takeaways
 
-Key takeway: with these steps you can avoid manually creating a pull request on GitHub.
+- Best practice is to not make changes in the main branch.
+- Only do changes/testing in the `dev` branch.
+- Command to checkout the dev branch:
+  ```
+  git checkout dev
+  ```
+- Git Workflow:
+  ```
+  git add .
+  git commit -m "[your-message]"
+  git push origin dev   
+  ```
+  > Then merge changes into main branch by creating a pull request or by using Git Bash.
 
-### 
+<!--
+#### Git Troubleshooting:
+
+- If you're currently on the dev branch and you want to directly merge changes from dev branch into the main branch:
+  - Switch to main branch: `git checkout main`
+  - Merge chnages from dev into main `git merge dev`
+  - Fix conflicts and commit the merge: `git commit -m "Merge changes from dev into main"`
+  - Push changes to remote: `git push origin main`
+
+  >Key takeway: with these steps you can avoid manually creating a pull request on GitHub.
+
+- If you are a couple commits **behind** main, you can merge changes from main into dev:
+  - Go to dev branch: `git checkout dev`
+  - Fetch latest changes from the remote repo: `git fetch origin`
+  - Merge chnages from origin/main into dev branch: `git merge origin/main`
+  - Resolve conflicts
+  - Complete merge: `git commit -m "Merge origin/main into dev"`
+  - Push merged changes to remote dev branch: `git psuh origin dev`
+
+- If you are a couple commits **ahead of** main you can merge changes from dev into  main:
+  - Go to main branch: `git checkout main`
+  - Merge dev into: `git merge dev`
+  - Resolve conflicts
+  - Push changes to remote main branch: `git push origin main`
+-->
