@@ -198,45 +198,6 @@ You want to be able to access the application on its port number.
   ```
   >Note: Ensure the aws security group allows ssh to jenkins ip. Ensure file.pem provided to Jenkins. Ensure ec2 is running.  > This will connect to the specified server, execute the listed commands (update, upgrade, and install nginx), and then close the SSH connection.
 
-### Verify deployment on AWS
-
-- Check the Public IP of the app's EC2 instance:
-  <br><img src="../assets/image-25.png" width=550>
-
-## Normal Proxy
-You want to be able to access the application on its port number.
-
-### Automated method
-
-- Go to CD Jenkins Job.
-- For `Build` > `Execute shell`, update the script to:
-  ```
-  # Get app and environment folders on home directory of VM
-  rsync -avz -e "ssh -o StrictHostKeyChecking=no" app ubuntu@<PublicIP>:/home/ubuntu/
-  rsync -avz -e "ssh -o StrictHostKeyChecking=no" environment ubuntu@<PublicIP>:/home/ubuntu/
-
-  ssh -o "StrictHostKeyChecking=no" ubuntu@<PublicIP> <<EOF
-      sudo apt-get update -y
-      sudo apt-get upgrade -y
-      sudo apt-get install nginx -y
-      sudo systemctl restart nginx 
-      
-      # Find and execute the script
-      cd environment/app/
-      sudo -n chmod +x provision.sh
-      ./provision.sh
-      
-      # Install dependencies and start the app
-      cd ..
-      cd ..
-      cd app
-      sudo apt-get install npm -y
-      npm install
-  ```
-  >Note: Ensure the aws security group allows ssh to jenkins ip. Ensure file.pem provided to Jenkins. Ensure ec2 is running.
-- `Save`.
-- Click `Build Now` on the first Jenkins CI job.
-
 #### Check on AWS
 - Connect and SSH into the application's EC2 instance.
 - Run `ls` to see the **app** and **environment** folders.
@@ -246,56 +207,11 @@ You want to be able to access the application on its port number.
   <br><img src="../assets/image-25.png" width=550>
   <br><img src="../assets/image-27.png" width=550>
 
-### Key Takeaways
-
+### Additional information
 - Best practice is to not make changes in the main branch.
-- Only do changes/testing in the `dev` branch.
-- Command to checkout the dev branch:
-  ```
-  git checkout dev
-  ```
-- Git Workflow:
-  ```
-  git add .
-  git commit -m "[your-message]"
-  git push origin dev   
-  ```
-  > Then merge changes into main branch by creating a pull request or by using Git Bash.
-
-<!--
-#### Git Troubleshooting:
-
-- If you're currently on the dev branch and you want to directly merge changes from dev branch into the main branch:
-  - Switch to main branch: `git checkout main`
-  - Merge chnages from dev into main `git merge dev`
-  - Fix conflicts and commit the merge: `git commit -m "Merge changes from dev into main"`
-  - Push changes to remote: `git push origin main`
-- Click `Build Now` on the first Jenkins CI job.
-
-#### Check on AWS
-- Connect and SSH into the application's EC2 instance.
-- Run `ls` to see the **app** and **environment** folders.
-- Navigate into the app folder and run `npm start` to start application.
-  <br><img src="../assets/image-26.png" width=400>
-- Check the Public IP of the app's EC2 instance without and with its port number:
-  <br><img src="../assets/image-25.png" width=550>
-  <br><img src="../assets/image-27.png" width=550>
-
-## Key Takeaways
-
-- Best practice is to not make changes in the main branch.
-- Only do changes/testing in the `dev` branch.
-- Command to checkout the dev branch:
-  ```
-  git checkout dev
-  ```
-- Git Workflow:
-  ```
-  git add .
-  git commit -m "[your-message]"
-  git push origin dev   
-  ```
-  > Then merge changes into main branch by creating a pull request or by using Git Bash.
+- Only do changes/testing in the testing branch: `git checkout dev`.
+- Git workflow `git add .`, `git commit -m "[your-message]"`, `git push origin dev`.
+- Then merge changes into main branch by creating a pull request or by using Git Bash.
 
 <!--
 #### Git Troubleshooting:
@@ -325,7 +241,7 @@ You want to be able to access the application on its port number.
 
 ## Deploy Application Changes on AWS
 
-### Architecture diagram
+### Architecture Diagram
 <img src="../assets/jenkins.png" width=500>
 
 ### Review the new IP address
@@ -367,8 +283,14 @@ On AWS, every time you stop and start an instance the Public IP address changes.
 - Check deployment on AWS.
   <br><img src="../assets/image-32.png" width=400>
 
+### Before code changes
+Before making any changes ensure that you're on testing branch (dev).
+
+- `git branch` to see your current branch.
+- `git checkout dev` to check out the dev branch.
+
+
 ### Apply code changes
-- Check you're on testing branch (dev).
 - Change the heading of app and save:
   <br><img src="../assets/image-33.png" width=400>
 - Push changes to dev branch.
@@ -387,5 +309,6 @@ On AWS, every time you stop and start an instance the Public IP address changes.
 
 ### Verify deployment on AWS
 
-- Yan see the code change of adding "2024":
+- Refresh the `<PublicIP>:3000` browser tab.
+- Review the code changes on AWS.
   <br><img src="../assets/image-34.png" width=400>
