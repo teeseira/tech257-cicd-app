@@ -62,17 +62,17 @@ bash: `sudo systemctl start jenkins`
   <br><img src="../assets/image-36.png" width=550>
 
 - Create the admin user and provide a Jenkins URL.
-  <br><img src="../assets/image-49.png" width=650>
+  <br><img src="../assets/image-49.png" width=750>
 - `Save and Finish`.
 - `Start using Jenkins`.
 
-## Jobs on Jenkins Server
+## CI/CD on Jenkins Server
 
 - Dashboard > User > New Item > Enter an item name > Freestyle project > OK.
 
 ### Continuous Integration (CI)
 
-#### Create Job 1
+#### Create a Job for CI
 
 - Create a new Job called `My-CI`, for example.
 - For `General`, give Description: e.g. _Building CI_ > tick `Discard old builds` > Max # of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
@@ -93,7 +93,7 @@ bash: `sudo systemctl start jenkins`
 - Click `Build Now`.
 
 #### Troubleshooting
-<img src="../assets/image-45.png" width=650>
+<img src="../assets/image-45.png" width=750>
 
 - To fix the error, manually install Node.js that is compatible with Ubuntu 18.04.
 - . In the Jenkins instance terminal, run the following:
@@ -104,9 +104,9 @@ bash: `sudo systemctl start jenkins`
 - On Jenkins server, click `Build now` for Job 1 again.
 - Test the CI setup by making a change to the repository, committing, and pushing it to GitHub.
 
-<img src="../assets/image-46.png" width=650>
+<img src="../assets/image-46.png" width=800>
 
-### Continuous Integration with Merge (CI-Merge)
+### Continuous Integration with Merge
 
 #### Create webhook on GitHub
 
@@ -114,9 +114,9 @@ bash: `sudo systemctl start jenkins`
 - Content type: choose `application/json`
 - Click `Add webhook`.
 
-<img src="../assets/image-38.png" width=550>
+<img src="../assets/image-38.png" width=700>
 
-#### Create Job 2
+#### Create a Job for CI-Merge
 
 - Create a new Job called `My-CI-Merge`, for example.
 - For `General`, give Description: e.g. _merge from dev to main after successful tests_ > tick `Discard old builds` > Max # of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
@@ -127,7 +127,7 @@ bash: `sudo systemctl start jenkins`
 - Click `Save`.
 - Click `Build Now`.
 
-<br><img src="../assets/image-47.png" width=650>
+<br><img src="../assets/image-47.png" width=800>
 
 ### Continuous Delivery (CD)
 
@@ -150,11 +150,11 @@ bash: `sudo systemctl start jenkins`
 - Instance type: t2 micro
 - Inbound rules for security group: ports 22 (SSH) and 80 (HTTP).
 
-<img src="../assets/image-42.png" width=700>
+<img src="../assets/image-42.png" width=900>
 
-<img src="../assets/image-32.png" width=400>
+<img src="../assets/image-32.png" width=600>
 
-#### Create Job 3
+#### Create a Job for CD
 
 - Create a new Job called `My-CD`, for example.
 - For `General`, give Description: e.g. _merge CD with AWS_ > tick `Discard old builds` > Max # of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
@@ -182,8 +182,8 @@ bash: `sudo systemctl start jenkins`
 
 Click `Build Now` from Job 1.
 
-<img src="../assets/image-40.png" width=500>
+<img src="../assets/image-40.png" width=800>
 
 ### Verify deployment on AWS
-<img src="../assets/image-41.png" width=500>
+<img src="../assets/image-41.png" width=700>
 
