@@ -11,7 +11,7 @@
 - Copy the output of the public key, then deploy the key to your desired GitHub repository (not entire Github Account).
   > Note: Make sure to `Allow write access`
 
-### Setup Jenkins
+### Create a Jenkins Job
 <!-- - Install Jenkins on your server. You can download it from the official website and follow installation instructions. -->
    - Access Jenkins through your browser by navigating to `http://<Jenkins-Server-IP>:8080/`. <!--http://35.176.97.54:8080/ -->
 
@@ -103,7 +103,7 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
 ### Create a new Jenkins job for merge from dev to main branch
 
 - Jenkins dashboard > "New Item" e.g. `My-CI-Merge` > Freestyle project > OK.
-- For `General`, give Description: e.g. _merge from dev to main after successful tests_ > tick `Discard old builds` > Max #: of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
+- For `General`, give Description: e.g. _merge from dev to main after successful tests_ > tick `Discard old builds` > Max # of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
 - For `Office 365 Connector`, tick `Restrict where this project can be run` and provide the Label expression (agent node).
 - For `Source Code Managment`, select `Git` > provide **Repository URL** (SSH one) > Branch specifier: `*/main`.
 - For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CI`.
@@ -141,13 +141,12 @@ Create a webhook on GitHub, set up continuous integration using Jenkins, and ens
 ### Create new job on Jenkins
 
 - Create a new Job called `My-CD`, for example.
-- For `General`, give Description: e.g. _merge CD with AWS_ > tick `Discard old builds` > Max #: of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
+- For `General`, give Description: e.g. _merge CD with AWS_ > tick `Discard old builds` > Max # of builds to keep: `3` > tick `GitHub project` > provide **Project url** (HTTPS one).
 - For `Source Code Managment`, select `Git` > provide **Repository URL** (SSH one) > Branch specifier: `*/main`.
 - For `Build Triggers`, tick `Build after other projects are built` and provide the Projects to watch e.g. `My-CD-Merge`.
-- For `Build Environment` tick `Provide Node & npm bin/ folder to PATH` and `SSH agent`
+- For `Build Environment` tick `Provide Node & npm bin/ folder to PATH` and `SSH agent`.
   - In the SSH agent add credentials > Kind: SSH Username with private key > Username: pemkey > Add private key (this is the value of the AWS **.pem** file) > Add.
 - For `Build` choose `Execute shell`, then enter:
-  ```bash
   ```bash
   ssh -o "StrictHostKeyChecking=no" ubuntu@3.250.0.106 <<EOF
       sudo apt update -y
@@ -235,7 +234,7 @@ You want to be able to access the application on its port number.
   - Push changes to remote main branch: `git push origin main`
 -->
 
-## Deploy Application Changes on AWS
+## Deployment of Changes to the Application
 
 ### Architecture Diagram
 <img src="../assets/jenkins.png" width=500>
@@ -249,13 +248,13 @@ On AWS, every time you stop and start an instance the Public IP address changes.
 
 ### Update Jenkins job
 
-- Update the Jenkins CD job:
+- Update the Jenkins Job 3 (for CD):
   ```bash
   # Replace with new app folder
-  rsync -avz -e "ssh -o StrictHostKeyChecking=no" app ubuntu@3.253.33.155:/home/ubuntu/
+  rsync -avz -e "ssh -o StrictHostKeyChecking=no" app ubuntu@[PublicIP-App]:/home/ubuntu/
 
   # SSH into the VM and execute commands
-  ssh -o "StrictHostKeyChecking=no" ubuntu@3.253.33.155 <<EOF
+  ssh -o "StrictHostKeyChecking=no" ubuntu@[PublicIP-App] <<EOF
       # Navigate to the app directory
       cd ~/app
 
@@ -307,3 +306,4 @@ Before making any changes ensure that you're on testing branch (dev).
 - Refresh the `<PublicIP>:3000` browser tab.
 - Review the code changes on AWS.
   <br><img src="../assets/image-34.png" width=400>
+
