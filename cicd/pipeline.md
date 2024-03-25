@@ -25,7 +25,6 @@ Set up Jenkins on an EC2 instance in AWS, in the `Ireland` region, using a t2.mi
 - Configure security groups to allow inbound traffic on ports 22 (SSH) and 8080 (Jenkins).
      <br><img src="../assets/image-37.png" width=550> 
 - `Launch instance`.
-  <br><img src="../assets/image-43.png" width=650>
 
 ### SSH into Jenkins Server
 
